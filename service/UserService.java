@@ -1,10 +1,9 @@
 package service;
 
-import constants.Error;
 import database.Database;
 import resource.Card;
 import resource.User;
-import validator.Username;
+import validator.UserServiceValidator;
 import validator.Validation;
 
 import java.util.List;
@@ -13,47 +12,30 @@ import java.util.stream.Collectors;
 
 public class UserService {
 
+    private UserServiceValidator validator;
+
+    public UserService() {
+        this.validator = new UserServiceValidator();
+    }
+
     /**
      * Validate and create a user
      *
      * @param args
      * @return
      */
-    public String create(String[] args) {
-        String result = "";
-        Validation validation = validateCreate(args);
+    public User create(String[] args) {
+        User user = null;
+        Validation validation = validator.validateCreate(args);
         if (validation.isValid()) {
             String name = args[0];
-            User user = new User(name);
+            user = new User(name);
             Database.setUser(user);
-        } else {
-            result = validation.getErrorString();
         }
 
-        return result;
+        return user;
     }
 
-    /**
-     * Validate username
-     *
-     * @param args
-     * @return
-     */
-    private Validation validateCreate(String[] args) {
-        Validation validation = new Validation();
-        if (args.length != 3) {
-            validation.addError(Error.INVALID_ARGS);
-            return validation;
-        }
-
-        String name = args[0];
-        if (!Username.validate(name)) {
-            validation.addError(Error.USERNAME_INVALID);
-            return validation;
-        }
-
-        return validation;
-    }
 
     /**
      * return balances of all users

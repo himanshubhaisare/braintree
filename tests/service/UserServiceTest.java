@@ -1,11 +1,12 @@
 package tests.service;
 
-import constants.Error;
 import org.junit.Test;
+import resource.User;
 import service.CardService;
 import service.UserService;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class UserServiceTest {
 
@@ -17,8 +18,8 @@ public class UserServiceTest {
         UserService service = new UserService();
         String input = "";
         String[] args = input.split(" ");
-        String result = service.create(args);
-        assertEquals("testCreateUserWithoutUsername: ", Error.INVALID_ARGS, result);
+        User user = service.create(args);
+        assertEquals("testCreateUserWithoutUsername: ", null, user);
     }
 
     @Test
@@ -26,8 +27,8 @@ public class UserServiceTest {
         UserService service = new UserService();
         String input = "Himanshu";
         String[] args = input.split(" ");
-        String result = service.create(args);
-        assertEquals("testCreateUserWithoutCardNumber: ", Error.INVALID_ARGS, result);
+        User user = service.create(args);
+        assertEquals("testCreateUserWithoutCardNumber: ", null, user);
     }
 
     @Test
@@ -35,8 +36,8 @@ public class UserServiceTest {
         UserService service = new UserService();
         String input = "Himanshu 5454545454545454";
         String[] args = input.split(" ");
-        String result = service.create(args);
-        assertEquals("testCreateUserWithoutCreditLimit: ", Error.INVALID_ARGS, result);
+        User user = service.create(args);
+        assertEquals("testCreateUserWithoutCreditLimit: ", null, user);
     }
 
     @Test
@@ -44,8 +45,9 @@ public class UserServiceTest {
         UserService service = new UserService();
         String input = "Himanshu 5454545454545454 $1000";
         String[] args = input.split(" ");
-        String result = service.create(args);
-        assertEquals("testCreateUser: ", "", result);
+        User user = service.create(args);
+        assertNotNull("testCreateUser: ", user);
+        assertEquals("testCreateUser:", "Himanshu", user.getName());
     }
 
     @Test
@@ -53,8 +55,8 @@ public class UserServiceTest {
         UserService service = new UserService();
         String input = "HimanshuVasantBhaisareTheSecond 5454545454545454 $1000";
         String[] args = input.split(" ");
-        String result = service.create(args);
-        assertEquals("testCreateUserWithInvalidUserName: ", Error.USERNAME_INVALID, result);
+        User user = service.create(args);
+        assertEquals("testCreateUserWithInvalidUserName: ", null, user);
     }
 
     @Test
